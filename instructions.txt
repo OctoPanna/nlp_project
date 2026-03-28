@@ -1,0 +1,27 @@
+*************************************************************************************
+Instructions for running the baseline RNN NER Model of the Stochastic Parrots group:
+*************************************************************************************
+
+1. Packages:
+pip install datasets pandas torch scikit-learn numpy
+
+2. Folder structure:
+For the script to run without errors, the folder structure should be the following (if you just unzip the zipped folder this should be the default):
+
+/stochastic_parrots_baseline_model
+ ├── predictions (6 .iob2 files, one for each experiment)
+ ├── instructions.txt (this file)
+ ├── baseline_model.py
+ └── /processed_annotated
+      ├── af_afrol_1.txt.tsv
+      ├── ... (other region .tsv files)
+
+This should ensure that the code runs smoothly.
+
+4. A successful run should include:
+- Loading the standard CoNLL-2003 data and the local Worldwide data.
+- Building a combined vocabulary and aligning the Named Entity tags.
+- Sequentially training and evaluating a Bidirectional LSTM model across 6 different experiments (e.g., Train Worldwide/Test Worldwide, Train English/Test Worldwide, etc.).
+- Printing the training loss for each epoch and the final macro F1-score for each experiment.
+- Generating 6 `.iob2` files in the same directory. These files contain the token-by-token predictions for each of the 6 test configurations.
+    - These files are already in the zipped structure and can be viewed without running the model first
