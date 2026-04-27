@@ -310,7 +310,8 @@ test_eng=test_eng.sample(frac=1, random_state=42).reset_index(drop=True) ##NOTE:
 
 # Split Global data
 train_ww, test_ww = train_test_split(dataGlobal, test_size=0.2, random_state=42)
-
+train_ww.reset_index(inplace=True,drop=True)
+test_ww.reset_index(inplace=True,drop=True)
 # Create Combined datasets
 train_combined = pd.concat([train_eng, train_ww], ignore_index=True)
 
@@ -346,7 +347,7 @@ def switchTokens(df1: pd.DataFrame, df2: pd.DataFrame, n: int):
 
         tags1   = df1.at[s1, 'ner_tags'] # Tags of said row
         tags2   = df2.at[s2, 'ner_tags']
-
+        
         idx1 = random.choice([i for i, t in enumerate(tags1) if t == tag]) # If multiple words with same tag, choose one
         idx2 = random.choice([i for i, t in enumerate(tags2) if t == tag])
 
@@ -356,7 +357,8 @@ def switchTokens(df1: pd.DataFrame, df2: pd.DataFrame, n: int):
         df2.at[s2, 'tokens'] = tokens2
 
     return df1, df2
-#switchedDf1,switchedDf2=switchTokens(train_eng,test_ww,100)
+train_eng_switched,train_ww_switched=switchTokens(train_eng,train_ww,100)
+train_combined_switched = pd.concat([train_eng_switched, train_ww_switched], ignore_index=True)
 
 # Build a master vocabulary from ALL training data
 word2idx = build_vocab([train_eng, train_ww])
@@ -368,9 +370,9 @@ experiments = [
     {"name": "Train: English | Test: English", "train": train_eng, "test": test_eng},
     {"name": "Train: Global   | Test: Global", "train": train_ww, "test": test_ww},
     {"name": "Train: Combined | Test: Global",   "train": train_combined,  "test": test_ww},
-    {"name": "Train: Combined | Test: Global",   "train": train_combined,  "test": test_ww},
+    {"name": "Train: Swapped Combined | Test: Global",   "train": train_combined_switched,  "test": test_ww},
     {"name": "Train: English   | Test: Global",   "train": train_eng, "test": test_ww},
-    {"name": "Train: English   | Test: Global",   "train": train_eng, "test": test_ww},
+    {"name": "Train: Swapped English   | Test: Global",   "train": train_eng_switched, "test": test_ww},
 ]
 
 # --- 3. RUN THE EXPERIMENTS ---
