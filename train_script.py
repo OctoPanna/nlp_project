@@ -357,7 +357,7 @@ def switchTokens(df1: pd.DataFrame, df2: pd.DataFrame, n: int):
         df2.at[s2, 'tokens'] = tokens2
 
     return df1, df2
-train_eng_switched,train_ww_switched=switchTokens(train_eng,train_ww,100)
+train_eng_switched,train_ww_switched=switchTokens(train_eng,train_ww,10000)
 train_combined_switched = pd.concat([train_eng_switched, train_ww_switched], ignore_index=True)
 
 # Build a master vocabulary from ALL training data
